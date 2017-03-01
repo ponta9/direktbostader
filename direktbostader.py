@@ -1,5 +1,6 @@
 import os
 import time
+import traceback
 
 from apis.studentbostader_api import Checker
 from apis.pushbullet_api import Pusher, notify_all
@@ -16,7 +17,12 @@ pusher = Pusher(PUSHBULLET_TOKEN)
 driver = Driver()
 
 while True:
-    time.sleep(FREQ)
-    apartments = checker.get_new()
-    notify_all(pusher, driver, apartments)
-    checker.refresh()
+    try:
+        time.sleep(FREQ)
+        apartments = checker.get_new()
+        notify_all(pusher, driver, apartments)
+        checker.refresh()
+    except Exception as e:
+        print(e)
+        traceback.print_tb(e.__traceback__)
+        checker = Checker(PHANTOMJS_PATH, URL)
