@@ -5,8 +5,7 @@ from apis.studentbostader_api import Checker
 from apis.pushbullet_api import Pusher, notify_all
 from apis.gspread_api import Driver
 
-# URL = "https://www.studentbostader.se/sv/sok-bostad/lediga-bostader?actionId=&omraden=&egenskaper=SNABB&objektTyper="
-URL = "https://www.studentbostader.se/sv/sok-bostad/lediga-bostader?actionId=&omraden=&egenskaper=&objektTyper="
+URL = "https://www.studentbostader.se/sv/sok-bostad/lediga-bostader?actionId=&omraden=&egenskaper=SNABB&objektTyper="
 PUSHBULLET_TOKEN = "o.qF8AZoBuPs1fjJvhHGl4utSckK79c5Hi"
 PHANTOMJS_PATH = os.path.join(os.getcwd(), "phantomjs")
 
