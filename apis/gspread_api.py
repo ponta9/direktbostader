@@ -16,5 +16,5 @@ class Driver(object):
 
     def get_emails(self):
         content = self._get_content()
-        emails = [signup["Email-address"] for signup in content if signup["Email-address"]]
+        emails = [signup["Email-adress"] for signup in content if signup["Email-adress"]]
         return emails
