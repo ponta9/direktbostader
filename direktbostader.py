@@ -6,7 +6,7 @@ from apis.studentbostader_api import Checker
 from apis.pushbullet_api import Pusher, notify_all
 from apis.gspread_api import Driver
 
-
+last_notified = 0
 FREQ = 30
 PHANTOMJS_PATH = os.path.join(os.getcwd(), "phantomjs")
 URL = "https://www.studentbostader.se/sv/sok-bostad/lediga-bostader?actionId=&omraden=&egenskaper=SNABB&objektTyper="
@@ -25,4 +25,9 @@ while True:
     except Exception as e:
         print(e)
         traceback.print_tb(e.__traceback__)
+
+        if time.time() > 60*30 + last_notified:
+            last_notified = time.time()
+            pusher.send_crash_report(e)
+
         checker = Checker(PHANTOMJS_PATH, URL)
