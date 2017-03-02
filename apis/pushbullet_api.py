@@ -18,6 +18,18 @@ class Pusher(object):
         if r.status_code != 200:
             raise Exception("Pushbullet error: " + r.text)
 
+    def send_crash_report(self, exception):
+        title = "Krash"
+        body = str(exception)
+
+        r = requests.post(url="https://api.pushbullet.com/v2/pushes",
+                          headers={"Access-Token": self.token, "Content-Type": "application/json"},
+                          data='{"body": "%s", "title": "%s", "type": "note", "email": "%s"}'
+                               % (body, title, "tresxnine@gmail.com"))
+
+        if r.status_code != 200:
+            raise Exception("Pushbullet error: " + r.text)
+
     # Never used, and probably will never be.
     def send_initial_greeting(self, email, name):
         title = "Hej %s!" % name
@@ -34,7 +46,15 @@ class Pusher(object):
 
 
 def notify_all(pusher, driver, apartments):
-    emails = driver.get_emails()
+    if not apartments:
+        return
+
+    try:
+        emails = driver.get_emails()
+    except Exception as e:
+        pusher.send_crash_report(e)
+        return
+
     for apartment in apartments:
         for email in emails:
             print("Notifying %s about %s" % (email, apartment["address"]))
