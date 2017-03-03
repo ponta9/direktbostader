@@ -49,11 +49,7 @@ def notify_all(pusher, driver, apartments):
     if not apartments:
         return
 
-    try:
-        emails = driver.get_emails()
-    except Exception as e:
-        pusher.send_crash_report(e)
-        return
+    emails = driver.get_emails()
 
     for apartment in apartments:
         for email in emails:
