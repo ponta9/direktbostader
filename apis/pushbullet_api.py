@@ -1,4 +1,5 @@
 import requests
+import json
 
 
 class Pusher(object):
@@ -7,8 +8,8 @@ class Pusher(object):
         self.token = token
 
     def send_apartment_found_push(self, email, href, address):
-        title = "Lagenhet pa %s!" % address
-        body = "Klicka har for att tas dit."
+        title = "Apartment on %s!" % address
+        body = "Click here to view it."
 
         r = requests.post(url="https://api.pushbullet.com/v2/pushes",
                           headers={"Access-Token": self.token, "Content-Type": "application/json"},
@@ -18,8 +19,20 @@ class Pusher(object):
         if r.status_code != 200:
             raise Exception("Pushbullet error: " + r.text)
 
+    def notify_all(self, apartments):
+        if not apartments:
+            return
+
+        with open("/apis/pushbullet_token") as file:
+            emails = json.load(file.read())
+
+        for apartment in apartments:
+            for email in emails:
+                print("Notifying %s about %s" % (email, apartment["address"]))
+                self.send_apartment_found_push(email, apartment["href"], apartment["address"])
+
     def send_crash_report(self, exception):
-        title = "Krash"
+        title = "Crash"
         body = str(exception)
 
         r = requests.post(url="https://api.pushbullet.com/v2/pushes",
@@ -43,15 +56,3 @@ class Pusher(object):
 
         if r.status_code != 200:
             raise Exception("Pushbullet error: " + r.text)
-
-
-def notify_all(pusher, driver, apartments):
-    if not apartments:
-        return
-
-    emails = driver.get_emails()
-
-    for apartment in apartments:
-        for email in emails:
-            print("Notifying %s about %s" % (email, apartment["address"]))
-            pusher.send_apartment_found_push(email, apartment["href"], apartment["address"])

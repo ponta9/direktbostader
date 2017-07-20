@@ -3,7 +3,7 @@ import time
 import traceback
 
 from apis.studentbostader_api import Checker
-from apis.pushbullet_api import Pusher, notify_all
+from apis.pushbullet_api import Pusher
 from apis.gspread_api import Driver
 
 last_notified = 0
@@ -20,7 +20,7 @@ while True:
     try:
         time.sleep(FREQ)
         apartments = checker.get_new()
-        notify_all(pusher, driver, apartments)
+        pusher.notify_all(apartments)
         checker.refresh()
     except Exception as e:
         print(e)

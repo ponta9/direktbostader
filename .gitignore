@@ -5,3 +5,4 @@ ghostdriver.log
 phantomjs
 already_seen.json
 testing.py
+emails.json

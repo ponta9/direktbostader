@@ -3,7 +3,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 
 class Driver(object):
-
+    """Not used"""
     def __init__(self):
         scope = ['https://spreadsheets.google.com/feeds']
         credentials = ServiceAccountCredentials.from_json_keyfile_name('apis/drive_secret.json', scope)
