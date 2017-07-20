@@ -23,8 +23,8 @@ class Pusher(object):
         if not apartments:
             return
 
-        with open("/apis/pushbullet_token") as file:
-            emails = json.load(file.read())
+        with open("emails.json") as file:
+            emails = json.load(file)["emails"]
 
         for apartment in apartments:
             for email in emails:

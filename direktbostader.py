@@ -4,24 +4,24 @@ import traceback
 
 from apis.studentbostader_api import Checker
 from apis.pushbullet_api import Pusher
-from apis.gspread_api import Driver
 
 last_notified = 0
 FREQ = 30
 PHANTOMJS_PATH = os.path.join(os.getcwd(), "phantomjs")
-URL = "https://www.studentbostader.se/sv/sok-bostad/lediga-bostader?actionId=&omraden=&egenskaper=SNABB&objektTyper="
-PUSHBULLET_TOKEN = "o.qF8AZoBuPs1fjJvhHGl4utSckK79c5Hi"
+URL = "https://www.studentbostader.se/sv/sok-bostad/lediga-bostader" \
+      "?actionId=&omraden=&egenskaper=SNABB&objektTyper=#&pagination=0&paginationantal=1000#"
+with open("apis/pushbullet_token") as file:
+    PUSHBULLET_TOKEN = file.read()
 
 checker = Checker(PHANTOMJS_PATH, URL)
 pusher = Pusher(PUSHBULLET_TOKEN)
-driver = Driver()
 
 while True:
     try:
-        time.sleep(FREQ)
         apartments = checker.get_new()
         pusher.notify_all(apartments)
         checker.refresh()
+        time.sleep(FREQ)
     except Exception as e:
         print(e)
         traceback.print_tb(e.__traceback__)

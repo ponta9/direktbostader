@@ -3,6 +3,7 @@ apis/drive_secret.json
 apis/pushbullet_token
 ghostdriver.log
 phantomjs
+apis/already_seen.json
 already_seen.json
 testing.py
 emails.json
