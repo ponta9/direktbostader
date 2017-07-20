@@ -44,8 +44,8 @@ class Pusher(object):
             raise Exception("Pushbullet error: " + r.text)
 
     # Never used, and probably will never be.
-    def send_initial_greeting(self, email, name):
-        title = "Hej %s!" % name
+    def send_initial_greeting(self, email):
+        title = "Hej %s!" % email
         body = "Du kommer nu att fa mail (eller Pushbullet notiser, om du laddar ner Pushbullet-appen)" \
                "sa fort en lagenhet laggs upp pa studentbostaders hemsida. Lycka till!"
 
