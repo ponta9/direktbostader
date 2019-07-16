@@ -11,6 +11,7 @@ Python 3.7.3
 Selenium 3.141.0
 Twilio 6.29.1
 Requests 2.22.0
+ChromeDriver 75.0.3770.140
 ```
 
 # New Features
