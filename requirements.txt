@@ -1,4 +1,0 @@
-gspread
-requests
-oauth2client
-selenium
