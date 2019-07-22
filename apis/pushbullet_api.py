@@ -19,40 +19,45 @@ class Pusher(object):
         if r.status_code != 200:
             raise Exception("Pushbullet error: " + r.text)
 
-    def notify_all(self, apartments):
+    def notify_all(self, apartments, emails):
         if not apartments:
             return
 
-        with open("emails.json") as file:
-            emails = json.load(file)["emails"]
-
         for apartment in apartments:
             for email in emails:
-                print("Notifying %s about %s" % (email, apartment["address"]))
+                print("\nNotifying %s about %s" % (email, apartment["address"]), end="\r", flush=True)
                 self.send_apartment_found_push(email, apartment["href"], apartment["address"])
+                
+        print("\n")#new line so the noticication is not overwritten
 
-    def send_crash_report(self, exception):
+    def send_crash_report(self, exception, email, twilioEnabled):
         title = "Crash"
-        body = str(exception)
+        if twilioEnabled:
+            from twilio.base.exceptions import TwilioRestException
+            if exception is TwilioRestException:
+                body = "Cant handle Twilio exception. Please check the console"
+            else:
+                body = str(exception) 
 
         r = requests.post(url="https://api.pushbullet.com/v2/pushes",
-                          headers={"Access-Token": self.token, "Content-Type": "application/json"},
-                          data='{"body": "%s", "title": "%s", "type": "note", "email": "%s"}'
-                               % (body, title, "tresxnine@gmail.com"))
+            headers={"Access-Token": self.token, "Content-Type": "application/json"},
+            data='{"body": "%s", "title": "%s", "type": "note", "email": "%s"}'
+                 % (body, title, email))
 
         if r.status_code != 200:
-            raise Exception("Pushbullet error: " + r.text)
+            raise Exception("email should be here: " + email + "Pushbullet error: " + r.text)
 
     # Never used, and probably will never be.
-    def send_initial_greeting(self, email):
-        title = "Hej %s!" % email
-        body = "Du kommer nu att fa mail (eller Pushbullet notiser, om du laddar ner Pushbullet-appen)" \
-               "sa fort en lagenhet laggs upp pa studentbostaders hemsida. Lycka till!"
+    def send_initial_greeting(self, emails):
+        body = "You will now receive a Pusbullet when a apartment becomes available on the provided link"
+        print(body)
+        print("If you didn't receive a the above message on Pusbullet please check your pusbullet config")
+        for email in emails:
+            title = "Hej %s!" % email
+            r = requests.post(url="https://api.pushbullet.com/v2/pushes",
+                headers={"Access-Token": self.token, "Content-Type": "application/json"},
+                data='{"body": "%s", "title": "%s", "type": "note", "email": "%s"}'
+                     % (body, title, email))
 
-        r = requests.post(url="https://api.pushbullet.com/v2/pushes",
-                          headers={"Access-Token": self.token, "Content-Type": "application/json"},
-                          data='{"body": "%s", "title": "%s", "type": "note", "email": "%s"}'
-                               % (body, title, email))
-
-        if r.status_code != 200:
-            raise Exception("Pushbullet error: " + r.text)
+            if r.status_code != 200:
+                raise Exception("Pushbullet error: " + r.text)
