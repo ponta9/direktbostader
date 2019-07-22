@@ -1,4 +1,3 @@
-# **Currently looking for appartment myself. Will release once i find something for myself :). Also its my first python project so be gentle**
 
 # Direktbostader-Chrome 
 A server-app for checking Studentbostäder's website for new apartments. The standard link checks after accommodations on first come, first served' basis
@@ -12,6 +11,7 @@ Selenium 3.141.0
 Twilio 6.29.1
 Requests 2.22.0
 ChromeDriver 75.0.3770.140
+configparser 3.7.4
 ```
 
 # New Features
@@ -20,10 +20,9 @@ ChromeDriver 75.0.3770.140
 * [x] Setting to Enable/Disable Headless mode
 * [X] Showing time while checking so you can be sure its not frozen and removing INFO messages from Chrome
 * [X] Sending SMS with Twillio
-* [ ] Completing this readme
-
-I may also add(but dont count on it)
-* [ ] A proper settings file
+* [X] A proper settings file
+* [X] Now sends out the welcome message on Pushbullet and Twilio
+* [X] This readme
 
 # Original Features
 * PhantomJS with Selenium(Support is deprecated)
@@ -32,15 +31,43 @@ I may also add(but dont count on it)
 * Already seen apartments in a file.
 
 ###  Getting Started
-Tested on Windows and Linux. 
+Tested on Windows but i don't see why it should not work in Linux
 
-Add Email/Emails in emails.json(For Pushbullet)
+On the first run the program will create a settings.ini file
+Here is a example config
+
+Example Config
 ```
-{"emails": ["example@example.comm"]}
+[DEFAULT]
+headless = true
+interval = 30
+url = https://www.studentbostader.se/sv/sok-bostad/lediga-bostader?actionId=&omraden=&egenskaper=SNABB&oboTyper=#&pagination=0&paginationantal=1000#
+crashreportnotification = True
+
+[Pushbullet]
+enabled = True
+firstpushbullet = False
+token = o.ojfs9hjsehf3420i529562h34hu9234
+emails = myEmail@domain.com,my2Email@domain.com
+
+[Twilio]
+enabled = true
+firsttwilio = False
+accountsid = ybdsahusdhqrhu3hurh9q3re3
+authtoken = uh41hu43pfdhnufh223uh4r2
+fromphonenumber = +46numberhere
+tophonenumbers = +46numberhere,+46numberhere
 ```
+
+Twilio is for receiving the info by SMS **P.S you can get free trial with more then enough balance**
+Pushbullet is for receiving the info with a push notification on your phone
+
 
 ## Running the program
 Run direktbostader.py
+
+First time running a module(twilio/pushbullet) you should recive a welcome message on the service to check that it is working
+Example "You will now receive a Pusbullet when a apartment becomes available on the provided link"
 
 This how the program should look when running. Updating the current time when it checks(currently every 30 seconds)
 ![Image of how the program should look](https://i.imgur.com/wkdtIOZ.png)
@@ -51,6 +78,7 @@ This how the program should look when running. Updating the current time when it
 * [Selenium](https://github.com/SeleniumHQ/selenium) - A browser automation framework and ecosystem
 * [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/) - WebDriver for Chrome
 * [PushBullet](https://www.pushbullet.com) - Send notifications to your phone
+* [ConfigParser](https://docs.python.org/3/library/configparser.html) - A config 
 
 
 ## Credits
